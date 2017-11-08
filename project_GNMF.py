@@ -80,7 +80,7 @@ def dataPrep(fold):
     error = test(X,fold)
     print(error)
 	'''
-	for j in range(len(Y)):
+    for j in range(len(Y)):
         r = []
         x = []
         for i in range(len(Y[j])):
