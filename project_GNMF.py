@@ -16,11 +16,12 @@ resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
 '''
-neighbours=100
-lambd = 1000
+
+neighbours=200
+lambd = 2000
 gnmf_components = 50
-B_loop = 10 #50
-gnmf_itr = 2
+B_loop = 100
+gnmf_itr = 2000
 
 result = []
 uusim = []
@@ -50,7 +51,7 @@ def dataPrep(fold):
         for j in range(1,neighbours+1):
             j = -1*j
             A[i][uusim_arg[i][j]] = uusim[i][uusim_arg[i][j]]
-    
+    '''
     meanitem = Y.sum(0) / (Y != 0).sum(0)
     meanuser = Y.sum(1) / (Y != 0).sum(1)
     meanitem.shape = (1,meanitem.shape[0])
@@ -78,6 +79,29 @@ def dataPrep(fold):
     X[X>5] = 5    
     error = test(X,fold)
     print(error)
+	'''
+	for j in range(len(Y)):
+        r = []
+        x = []
+        for i in range(len(Y[j])):
+            if(Y[j][i] == 0):
+                r.append(0)
+                temp = int((np.mean(np.array(Y[j])) + np.mean(np.array(Y[:,i])))/2)
+                if(temp<1):# or temp>5): change
+                    x.append(1)
+                elif temp>5:
+                    x.append(5)
+                else:
+                    x.append(temp)
+            else: 
+                r.append(1)
+                x.append(Y[j][i])
+        X.append(x)
+        R.append(r)
+    X = np.array(X)
+    R = np.array(R)
+    error = test(X,fold)
+    print("Error on intial data",error)
             
 
 def latentfactor(fold):
