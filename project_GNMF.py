@@ -78,7 +78,7 @@ def dataPrep(fold):
     X[X<1] = 1
     X[X>5] = 5    
     error = test(X,fold)
-    print(error)
+    print(error on ba)
 	'''
     for j in range(len(Y)):
         r = []
