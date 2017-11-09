@@ -135,7 +135,7 @@ def test(X,i):
 
 def main():
     temps = []
-    for i in range(1,2):
+    for i in range(1,6):
         print(i)
         dataPrep(i)
         X,error_iter = latentfactor(i)
@@ -143,7 +143,9 @@ def main():
         print("error for--" , error_iter , "for fold--" , i)
     print(temps)
     df = pd.DataFrame(np.array(temps))
-    writer = pd.ExcelWriter(resultbase + '/gnmf.xlsx')
+    filename = 'gnmf_'+str(neighbours)+'_'+str(lambd)+'_'+ \
+            str(gnmf_components)+'_'+str(B_loop)+'_'+str(gnmf_itr)+'.xlsx'
+    writer = pd.ExcelWriter(resultbase + filename)
     df.to_excel(writer,'Sheet1')
     writer.save()
 
