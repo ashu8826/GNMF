@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import gnmf
 import pandas as pd
-'''
+
 testbase = "ml-100k/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
@@ -14,7 +14,7 @@ database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
-
+'''
 neighbours=200
 lambd = 2000
 gnmf_components = 50
@@ -99,8 +99,8 @@ def dataPrep(fold):
         R.append(r)
     X = np.array(X)
     R = np.array(R)
-    error = test(X,fold)
-    print("Error on intial data",error)
+    #error = test(X,fold)
+    #print("Error on intial data",error)
             
 def latentfactor(fold):
     global R
@@ -110,9 +110,9 @@ def latentfactor(fold):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-        error = test(X,fold)
-        print(i,error)
-        error_iter.append(error)
+        #error = test(X,fold)
+        #print(i,error)
+        #error_iter.append(error)
     return X,error_iter
 
 def test(X,i):
@@ -132,6 +132,7 @@ def test(X,i):
     return error
 
 def main():
+    global gn
     temps = []
     for i in range(1,6):
         print(i)

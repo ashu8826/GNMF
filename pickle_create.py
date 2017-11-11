@@ -1,15 +1,19 @@
 import numpy as np
 import pandas as pd
 import pickle
-
+'''
 rawbase = "ml-1m/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
-
 nuser = 6040#943
 nitem = 3952#1682
-#nuser = 943
-#nitem = 1682
+
+'''
+rawbase = "ml-100k/"
+database = "DataPickle/100K/"
+resultbase= "Results/100K"
+nuser = 943
+nitem = 1682
 
 uimat = []
 uimat_meanshifted = []
@@ -96,6 +100,7 @@ def uusersim():
 
 
 for i in range(1,6):
+    print(i)
     init()
     pa = rawbase+ "u"+str(i)+".base"
     createUI(pa)
@@ -106,15 +111,3 @@ for i in range(1,6):
         pickle.dump(uimat,f)
     with open(database+str(i)+"/usermat.pickle","wb") as f:
         pickle.dump(uusim,f)
-    
-    df = pd.DataFrame(np.array(uusim))#, index = index, columns = ["NMAE"]
-    writer = pd.ExcelWriter(database + 'uusim.xlsx')
-    df.to_excel(writer,'Sheet1')
-    writer.save()
-    
-tu = []
-ts = []
-with open(database+str(1)+"/input.pickle","rb") as f:
-    tu = pickle.load(f)
-with open(database+str(1)+"/usermat.pickle","rb") as f:
-    ts = pickle.load(f)
