@@ -19,8 +19,8 @@ neighbours=200
 lambd = 2000
 gnmf_components = 50
 
-B_loop = 10
-gnmf_itr = 100
+B_loop = 20
+gnmf_itr = 1000
 
 result = []
 uusim = []
@@ -113,18 +113,17 @@ def main():
     global gnmf_components
     error_data = [] 
     #gnmf_components_arr = []
-    #lambd_arr = []
-    neighbours_arr = [100,120,140,160,200,220,240,260,280,300]
+    lambd_arr = [0.1,1,10,100,1000,2000,3000,4000,5000,10000]
+    #neighbours_arr = [100,120,140,160,200,220,240,260,280,300]
     for i in range(1,6):
         neighbours = 200
         lambd =2000
         gnmf_components = 50
         dataPrep(i)
         error = []
-        for n in neighbours_arr:
+        for n in lambd_arr:
             print("doing fold ",i," for ",n)
-            neighbours = n
-            create_A()
+            lambd = n
             X,error_iter = latentfactor(i)
             e = test(X,i)
             print("error for neighbour ",n," is ",e)
@@ -132,7 +131,7 @@ def main():
         error_data.append(error)
         
     df = pd.DataFrame(np.array(error_data))
-    filename = 'gnmfneigh_'+str(neighbours)+'_'+str(lambd)+'_'+ \
+    filename = 'gnmflambd_'+str(neighbours)+'_'+str(lambd)+'_'+ \
             str(gnmf_components)+'_'+str(B_loop)+'_'+str(gnmf_itr)+'.xlsx'
     writer = pd.ExcelWriter(resultbase + filename)
     df.to_excel(writer,'Sheet1')
