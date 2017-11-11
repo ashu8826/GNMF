@@ -4,7 +4,7 @@ pk   m4-4x : varaitions all 3 for 100k : ssh -i "pkcf.pem" ubuntu@ec2-13-112-190
 ashu m4-4x : 1M in 5 tmux one for each fold  : ssh -i "AWS.pem" ubuntu@ec2-13-115-18-169.ap-northeast-1.compute.amazonaws.com
 	 m4-10x: 1M in 5 tmux one for each fold  : ssh -i "AWS.pem" ubuntu@ec2-13-112-49-56.ap-northeast-1.compute.amazonaws.com
 	 m4-16x: varaitions all 3 for 1M         : ssh -i "AWS.pem" ubuntu@ec2-13-230-67-221.ap-northeast-1.compute.amazonaws.com
-	 c4-8x : nothing                         : ssh -i "AWS.pem" ubuntu@ec2-52-198-1-167.ap-northeast-1.compute.amazonaws.com
+	 c4-8x : varaitions all 3 for 100k       : ssh -i "AWS.pem" ubuntu@ec2-52-198-1-167.ap-northeast-1.compute.amazonaws.com
 	 
 pk ip: 192.168.58.133
 
