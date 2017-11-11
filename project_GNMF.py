@@ -15,12 +15,12 @@ resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
 
-neighbours=200
+neighbours=1000
 lambd = 2000
-gnmf_components = 50
+gnmf_components = 150
 
 B_loop = 50
-gnmf_itr = 100
+gnmf_itr = 2000
 
 result = []
 uusim = []
@@ -50,35 +50,6 @@ def dataPrep(fold):
         for j in range(1,neighbours+1):
             j = -1*j
             A[i][uusim_arg[i][j]] = uusim[i][uusim_arg[i][j]]
-    '''
-    meanitem = Y.sum(0) / (Y != 0).sum(0)
-    meanuser = Y.sum(1) / (Y != 0).sum(1)
-    meanitem.shape = (1,meanitem.shape[0])
-    meanuser.shape = (meanuser.shape[0],1)
-    #globalmean = np.mean(Y[Y>0])
-    
-    where_are_NaNs = np.isnan(meanitem)
-    meanitem[where_are_NaNs] = 0
-    where_are_NaNs = np.isnan(meanuser)
-    meanuser[where_are_NaNs] = 0
-    
-    R = np.array(Y)
-    R[R>0]=1
-    M=np.array(Y)
-    M[M<1] = 10
-    M[M<6] = 0
-    M[M>1] = 1
-    X = np.array(Y)
-    
-    X = X + (meanuser/2)
-    #X = X - globalmean
-    X = X + (meanitem/2)
-    X = Y + M*X
-    X[X<1] = 1
-    X[X>5] = 5    
-    error = test(X,fold)
-    print(error on ba)
-	'''
     for j in range(len(Y)):
         r = []
         x = []
@@ -101,7 +72,8 @@ def dataPrep(fold):
     R = np.array(R)
     error = test(X,fold)
     print("Error on intial data",error)
-            
+
+
 def latentfactor(fold):
     global R
     global X
@@ -110,9 +82,10 @@ def latentfactor(fold):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-        error = test(X,fold)
-        print(i,error)
-        error_iter.append(error)
+	if (i+1)%5==0:
+            error = test(X,fold)
+            print(i,error)
+            error_iter.append(error)
     return X,error_iter
 
 def test(X,i):
