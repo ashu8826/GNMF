@@ -1,0 +1,37 @@
+pk   m4-4x : varaitions all 3 for 100k : ssh -i "pkcf.pem" ubuntu@ec2-13-112-190-138.ap-northeast-1.compute.amazonaws.com
+     m4-10x: nothing 
+  
+ashu m4-4x : 1M in 5 tmux one for each fold  : ssh -i "AWS.pem" ubuntu@ec2-13-115-18-169.ap-northeast-1.compute.amazonaws.com
+	 m4-10x: 1M in 5 tmux one for each fold  : ssh -i "AWS.pem" ubuntu@ec2-13-112-49-56.ap-northeast-1.compute.amazonaws.com
+	 m4-16x: varaitions all 3 for 1M         : ssh -i "AWS.pem" ubuntu@ec2-13-230-67-221.ap-northeast-1.compute.amazonaws.com
+	 c4-8x : nothing                         : ssh -i "AWS.pem" ubuntu@ec2-52-198-1-167.ap-northeast-1.compute.amazonaws.com
+	 
+pk ip: 192.168.58.133
+
+100k
+neighbours : 200
+lambd : 2000
+gnmf_components : 50
+gnmf_itr : 2000
+Bloop : 100 error on each itr
+
+varaitions : 
+gnmf_itr: 1000 Bloop: 20
+gnmf_components_arr = [10,20,30,40,50,60,70,80,90,100]
+lambd_arr = [0.1,1,10,100,1000,2000,3000,4000,5000,10000]
+neighbours_arr = [100,120,140,160,200,220,240,260,280,300]
+
+
+1M
+neighbours : 1000
+lambd : 2000
+gnmf_components :150
+gnmf_itr = 2000
+Bloop : 50 : error on every 5th fold inital error are : 0.64 0.6393 0.65 0.64 0.655
+
+varaitions : 
+gnmf_itr: 1000 Bloop: 20
+gnmf_components_arr = [50,100,150,200,250,300,350,400,450,500]
+lambd_arr = [0.1,1,10,100,1000,2000,3000,4000,5000,10000]
+neighbours_arr = [600,700,800,900,1000,1100,1200,1300,1400,1500]
+	
