@@ -82,7 +82,7 @@ def latentfactor(fold):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-	if (i+1)%5==0:
+        if (i+1)%5==0:
             error = test(X,fold)
             print(i,error)
             error_iter.append(error)
