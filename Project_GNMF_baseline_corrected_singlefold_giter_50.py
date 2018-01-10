@@ -134,8 +134,8 @@ def test(X,i):
             data = da[:3]
             predictedRating = X[data[1]-1][data[0]-1] 
             w = w+1
-            error += abs(predictedRating - data[2])
-            rm += (abs(predictedRating - data[2])) ** 2
+            error += np.abs(np.rint(predictedRating) - data[2])
+            rm += (np.abs(np.rint(predictedRating) - data[2])) ** 2
         nmae = error/(4*w)
         mae = error/w
         rmse = (rm/w) ** 0.5
