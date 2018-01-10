@@ -137,17 +137,24 @@ def find_mu(num_of_ratings, Y):
 def latentfactor(fold):
     global R
     global X
-    error_iter = []
-    error = test(X,fold)
-    print(-1,error)
+    nmae_iter = []
+    mae_iter = []
+    rmse_iter = []
+    nmae, mae, rmse = test(X,fold)
+    nmae_iter.append(nmae)
+    mae_iter.append(mae)
+    rmse_iter.append(rmse)
+    print(-1,nmae, mae, rmse)
     for i in range(B_loop):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-        error = test(X,fold)
-        print(i,error)
-        error_iter.append(error)
-    return X,error_iter
+        nmae, mae, rmse = test(X,fold)
+        print(i,nmae, mae, rmse)
+        nmae_iter.append(nmae)
+        mae_iter.append(mae)
+        rmse_iter.append(rmse)
+    return X,nmae_iter, mae_iter, rmse_iter
 
 def test_old(X,i):
     p = testbase + '/u' + str(i) +'.test'
@@ -168,29 +175,42 @@ def test_old(X,i):
 def test(X,i):
     count, test_data = getlist("{}/100K/{}.train".format("dataset",i))
     error = 0
+    rm = 0
     w = 0
     for user, item, rating in test_data:
         predictedRating = X[item][user] 
         w = w+1
         error += abs(predictedRating - rating)
-    error = error/(4*w)
-    return error
-   
+        rm += (abs(predictedRating - rating)) ** 2
+    nmae = error/(4*w)
+    mae = error/w
+    rmse = (rm/w) ** 0.5
+    return nmae, mae, rmse
+    
 
 def main():
-    temps = []
+    temps_nmae = []
+    temps_mae = []
+    temps_rmse = []
     for i in range(1,6):
         print(i)
         dataPrep(i)
-        X,error_iter = latentfactor(i)
-        temps.append(error_iter)
-        print("error for--" , error_iter , "for fold--" , i)
-    print(temps)
-    df = pd.DataFrame(np.array(temps))
+        X,nmae_iter, mae_iter, rmse_iter = latentfactor(i)
+        temps_nmae.append(nmae_iter)
+        temps_mae.append(mae_iter)
+        temps_rmse.append(rmse_iter)
+        print("error for--" , nmae_iter, mae_iter, rmse_iter , "for fold--" , i)
+    print(temps_nmae, temps_mae, temps_rmse)
+    df_nmae = pd.DataFrame(np.array(temps_nmae))
+    df_mae = pd.DataFrame(np.array(temps_mae))
+    df_rmse = pd.DataFrame(np.array(temps_rmse))
     filename = 'gnmf_'+str(neighbours)+'_'+str(lambd)+'_'+ \
             str(gnmf_components)+'_'+str(B_loop)+'_'+str(gnmf_itr)+'.xlsx'
     writer = pd.ExcelWriter(resultbase + filename)
-    df.to_excel(writer,'Sheet1')
+    df_nmae.to_excel(writer,'NMAE')
+    df_mae.to_excel(writer, 'MAE')
+    df_rmse.to_excel(writer, 'RMSE')
+    
     writer.save()
 
 if __name__ == "__main__": main()
