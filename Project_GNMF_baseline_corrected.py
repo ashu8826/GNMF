@@ -19,7 +19,7 @@ nitem = 3952
 neighbours=200
 lambd = 2000
 gnmf_components = 50
-B_loop = 2000
+B_loop = 10
 gnmf_itr = 20
 
 result = []
@@ -32,38 +32,6 @@ Y = [] #uimat
 number_of_ratings = 80000
 K_baseline = 25
 mu = 0
-    
-################## hassija code ########################
-
-def getmatrix(data_file):
-	file_len, A = getlist(data_file)
-
-	num_users = max(A, key = lambda x: x[0])[0] + 1
-	num_items = max(A, key = lambda x: x[1])[1] + 1
-
-	M = np.empty((num_users, num_items))
-
-	M.fill(0)
-
-	for user, item, rating in A:
-		M[user][item] = rating
-
-	return num_users, num_items, M
-
-def getlist(data_file):
-	file = open(data_file, "r")
-
-	A = []
-
-	for line in file:
-		*data, _ = map(int, line.split(','))
-
-		A.append(data)
-
-	return len(A), A
-
-############### end ###################
-
 
 def dataPrep(fold):
     global Y
@@ -156,9 +124,10 @@ def latentfactor(fold):
         rmse_iter.append(rmse)
     return X,nmae_iter, mae_iter, rmse_iter
 
-def test_old(X,i):
+def test(X,i):
     p = testbase + '/u' + str(i) +'.test'
     error = 0
+    rm = 0
     w = 0
     with open(p) as f:
         for line in f:
@@ -168,11 +137,13 @@ def test_old(X,i):
             predictedRating = X[data[1]-1][data[0]-1] 
             w = w+1
             error += abs(predictedRating - data[2])
-            #print(predictedRating,data[2])
-        error = error/(4*w)
-    return error
-    
-def test(X,i):
+            rm += (abs(predictedRating - data[2])) ** 2
+        nmae = error/(4*w)
+        mae = error/w
+        rmse = (rm/w) ** 0.5
+    return nmae, mae, rmse
+'''    
+def test_old(X,i):
     count, test_data = getlist("{}/100K/{}.train".format("dataset",i))
     error = 0
     rm = 0
@@ -186,7 +157,7 @@ def test(X,i):
     mae = error/w
     rmse = (rm/w) ** 0.5
     return nmae, mae, rmse
-    
+'''    
 
 def main():
     temps_nmae = []

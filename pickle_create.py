@@ -2,29 +2,21 @@ import numpy as np
 import pickle
 
 data_root = "dataset"
-
-datasets = [("{}/100K".format(data_root), "\t"),("{}/1M".format(data_root), "::")]
-
-data_raw = "{}/raw.data"
-data_file = "{}/final.data"
-
+datasets = [("{}/ml-100K".format(data_root), "\t"),("{}/ml-1M".format(data_root), "::")]
 folds = 5
-
-file_sep = ","
-
 
 def getmatrix(data_file):
 	file_len, A = getlist(data_file)
 
-	num_users = max(A, key = lambda x: x[0])[0] + 1
-	num_items = max(A, key = lambda x: x[1])[1] + 1
+	num_users = max(A, key = lambda x: x[0])[0]
+	num_items = max(A, key = lambda x: x[1])[1]
 
 	M = np.empty((num_users, num_items))
 
 	M.fill(0)
 
 	for user, item, rating in A:
-		M[user][item] = rating
+		M[user-1][item-1] = rating
 
 	return num_users, num_items, M
 
@@ -34,7 +26,7 @@ def getlist(data_file):
 	A = []
 
 	for line in file:
-		*data, _ = map(int, line.split(','))
+		*data, _ = map(int, line.split('\t'))
 
 		A.append(data)
 
@@ -79,12 +71,12 @@ def std_dev(RM, num_users):
 
 for data_root, sep in datasets:
 	print("dataset:", data_root)
-	database = "DataPickle/"+data_root.split("/",1)[1]+"/";
-	for fold in range(config.folds):
+	database = "DataPickle/"+data_root.split("-",1)[1]+"/";
+	for fold in range(folds):
 		
 		print("fold", fold, end = ": ")
 		
-		num_users, num_items, RM = getmatrix("{}/{}.train".format(data_root, fold + 1))
+		num_users, num_items, RM = getmatrix("{}/{}.base".format(data_root, "u"+str(fold + 1)))
 		
 		MU   = mean_users(RM, num_users)
 		
