@@ -7,7 +7,7 @@ testbase = "ml-100k/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 943
-nitem = 1349#1682
+nitem = 1682
 '''
 testbase = "ml-1m/"
 database = "DataPickle/1M/"
@@ -19,8 +19,8 @@ nitem = 3952
 neighbours=200
 lambd = 2000
 gnmf_components = 50
-B_loop = 10
-gnmf_itr = 20
+B_loop = 500
+gnmf_itr = 100
 
 result = []
 uusim = []
