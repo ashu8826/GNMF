@@ -1,13 +1,20 @@
 import numpy as np
 import pickle
 import gnmf
-import pandas as pd
-'''
+#import pandas as pd
+
 testbase = "ml-100k/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 943
-nitem = 1682
+nitem = 1349
+
+neighbours=200
+lambd = 2000
+gnmf_components = 50
+B_loop = 200
+gnmf_itr = 1
+
 '''
 testbase = "ml-1m/"
 database = "DataPickle/1M/"
@@ -18,10 +25,9 @@ nitem = 3952
 neighbours=1000
 lambd = 2000
 gnmf_components = 150
-
 B_loop = 50
 gnmf_itr = 2000
-
+'''
 result = []
 uusim = []
 A=[]
@@ -82,7 +88,7 @@ def latentfactor(fold):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-        if (i+1)%5==0:
+        if i%10==0:
             error = test(X,fold)
             print(i,error)
             error_iter.append(error)
@@ -113,11 +119,11 @@ def main():
         temps.append(error_iter)
         print("error for--" , error_iter , "for fold--" , i)
     print(temps)
-    df = pd.DataFrame(np.array(temps))
-    filename = 'gnmf_'+str(neighbours)+'_'+str(lambd)+'_'+ \
-            str(gnmf_components)+'_'+str(B_loop)+'_'+str(gnmf_itr)+'.xlsx'
-    writer = pd.ExcelWriter(resultbase + filename)
-    df.to_excel(writer,'Sheet1')
-    writer.save()
+    #df = pd.DataFrame(np.array(temps))
+    #filename = 'gnmf_'+str(neighbours)+'_'+str(lambd)+'_'+ \
+    #        str(gnmf_components)+'_'+str(B_loop)+'_'+str(gnmf_itr)+'.xlsx'
+    #writer = pd.ExcelWriter(resultbase + filename)
+    #df.to_excel(writer,'Sheet1')
+    #writer.save()
 
 if __name__ == "__main__": main()       
