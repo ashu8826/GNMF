@@ -112,13 +112,11 @@ def latentfactor(fold):
     nmae_iter.append(nmae)
     mae_iter.append(mae)
     rmse_iter.append(rmse)
-    print(-1,nmae, mae, rmse)
     for i in range(B_loop):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
         nmae, mae, rmse = test(X,fold)
-        print(i,nmae, mae, rmse)
         nmae_iter.append(nmae)
         mae_iter.append(mae)
         rmse_iter.append(rmse)
@@ -142,22 +140,7 @@ def test(X,i):
         mae = error/w
         rmse = (rm/w) ** 0.5
     return nmae, mae, rmse
-'''    
-def test_old(X,i):
-    count, test_data = getlist("{}/100K/{}.train".format("dataset",i))
-    error = 0
-    rm = 0
-    w = 0
-    for user, item, rating in test_data:
-        predictedRating = X[item][user] 
-        w = w+1
-        error += abs(predictedRating - rating)
-        rm += (abs(predictedRating - rating)) ** 2
-    nmae = error/(4*w)
-    mae = error/w
-    rmse = (rm/w) ** 0.5
-    return nmae, mae, rmse
-'''    
+ 
 
 def main():
     global neighbours
@@ -165,15 +148,14 @@ def main():
     global gnmf_components
     global B_loop
     
-    temps_nmae = []
-    temps_mae = []
-    temps_rmse = []
     for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
         for ng in [50, 100, 200, 250]:
             for comp in [20,40,50,60,80]:
+                print("l-- " + l + " ng -- " + ng + " comp -- " + comp)
+                temps_nmae = []
+                temps_mae = []
+                temps_rmse = []
                 for i in range(1,2):
-                    print(i)
-                    
                     lambd = l
                     neighbours = ng
                     gnmf_components = comp
@@ -183,8 +165,6 @@ def main():
                     temps_nmae.append(nmae_iter)
                     temps_mae.append(mae_iter)
                     temps_rmse.append(rmse_iter)
-                    print("error for--" , nmae_iter, mae_iter, rmse_iter , "for fold--" , i)
-                print(temps_nmae, temps_mae, temps_rmse)
                 df_nmae = pd.DataFrame(np.array(temps_nmae))
                 df_mae = pd.DataFrame(np.array(temps_mae))
                 df_rmse = pd.DataFrame(np.array(temps_rmse))
