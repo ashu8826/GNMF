@@ -3,13 +3,13 @@ import pickle
 import gnmf
 import pandas as pd
 
-testbase = "ml-100k/"
+testbase = "dataset/ml-100K/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 943
 nitem = 1682
 '''
-testbase = "ml-1m/"
+testbase = "ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040
@@ -105,6 +105,16 @@ def find_mu(num_of_ratings, Y):
 def latentfactor(fold):
     global R
     global X
+<<<<<<< HEAD
+    #nmae_iter = []
+    #mae_iter = []
+    #rmse_iter = []
+    #nmae, mae, rmse = test(X,fold)
+    #nmae_iter.append(nmae)
+    #mae_iter.append(mae)
+    #rmse_iter.append(rmse)
+    #print(-1,nmae, mae, rmse)
+=======
     nmae_iter = []
     mae_iter = []
     rmse_iter = []
@@ -112,18 +122,29 @@ def latentfactor(fold):
     nmae_iter.append(nmae)
     mae_iter.append(mae)
     rmse_iter.append(rmse)
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
     for i in range(B_loop):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
+<<<<<<< HEAD
+        #nmae, mae, rmse = test(X,fold)
+        #print(i,nmae, mae, rmse)
+        #nmae_iter.append(nmae)
+        #mae_iter.append(mae)
+        #rmse_iter.append(rmse)
+    nmae, mae, rmse = test(X,fold)
+    return X,nmae, mae, rmse
+=======
         nmae, mae, rmse = test(X,fold)
         nmae_iter.append(nmae)
         mae_iter.append(mae)
         rmse_iter.append(rmse)
     return X,nmae_iter, mae_iter, rmse_iter
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
 
 def test(X,i):
-    p = testbase + '/u' + str(i) +'.test'
+    p = testbase + 'u' + str(i) +'.test'
     error = 0
     rm = 0
     w = 0
@@ -140,7 +161,10 @@ def test(X,i):
         mae = error/w
         rmse = (rm/w) ** 0.5
     return nmae, mae, rmse
+<<<<<<< HEAD
+=======
  
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
 
 def main():
     global neighbours
@@ -148,6 +172,13 @@ def main():
     global gnmf_components
     global B_loop
     
+<<<<<<< HEAD
+    #temps_nmae = []
+    #temps_mae = []
+    #temps_rmse = []
+    error = []
+=======
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
     for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
         for ng in [50, 100, 200, 250]:
             for comp in [20,40,50,60,80]:
@@ -156,11 +187,40 @@ def main():
                 temps_mae = []
                 temps_rmse = []
                 for i in range(1,2):
+<<<<<<< HEAD
+                    
+=======
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
                     lambd = l
                     neighbours = ng
                     gnmf_components = comp
                     
                     dataPrep(i)
+<<<<<<< HEAD
+                    X,nmae, mae, rmse = latentfactor(i)
+                    err = ["l: "+str(l)+" ng: "+str(ng)+" comp: "+str(comp) ,nmae, mae, rmse]
+                    print(err)
+                    error.append(err)
+                    #temps_nmae.append(nmae_iter)
+                    #temps_mae.append(mae_iter)
+                    #temps_rmse.append(rmse_iter)
+                    #print("error for--" , nmae_iter, mae_iter, rmse_iter , "for fold--" , i)
+                #print(temps_nmae, temps_mae, temps_rmse)
+                    
+    df_error = pd.DataFrame(np.array(error))
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning.xlsx')
+    df_error.to_excel(writer,'Sheet1')
+    writer.save()
+                #df_nmae = pd.DataFrame(np.array(temps_nmae))
+                #df_mae = pd.DataFrame(np.array(temps_mae))
+                #df_rmse = pd.DataFrame(np.array(temps_rmse))
+                #filename = 'gnmf_neigh_lambd_gcomp_giter'+str(neighbours)+'_'+str(lambd)+'_'+ \
+                #        str(gnmf_components)+'_'+ '_'+str(gnmf_itr)+'.xlsx'
+                #writer = pd.ExcelWriter(resultbase + filename)
+                #df_nmae.to_excel(writer,'NMAE')
+                #df_mae.to_excel(writer, 'MAE')
+                #df_rmse.to_excel(writer, 'RMSE')
+=======
                     X,nmae_iter, mae_iter, rmse_iter = latentfactor(i)
                     temps_nmae.append(nmae_iter)
                     temps_mae.append(mae_iter)
@@ -174,7 +234,8 @@ def main():
                 df_nmae.to_excel(writer,'NMAE')
                 df_mae.to_excel(writer, 'MAE')
                 df_rmse.to_excel(writer, 'RMSE')
+>>>>>>> 6418c2f78be634576c7640582bf2feebd73ec039
                 
-                writer.save()
+                #writer.save()
 
 if __name__ == "__main__": main()
