@@ -175,7 +175,7 @@ def main():
                 #print(temps_nmae, temps_mae, temps_rmse)
                     
     df_error = pd.DataFrame(np.array(error))
-    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning.xlsx')
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_100.xlsx')
     df_error.to_excel(writer,'Sheet1')
     writer.save()
                 #df_nmae = pd.DataFrame(np.array(temps_nmae))
