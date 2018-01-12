@@ -105,31 +105,30 @@ def find_mu(num_of_ratings, Y):
 def latentfactor(fold):
     global R
     global X
-    #nmae_iter = []
-    #mae_iter = []
-    #rmse_iter = []
-    #nmae, mae, rmse = test(X,fold)
-    #nmae_iter.append(nmae)
-    #mae_iter.append(mae)
-    #rmse_iter.append(rmse)
-    #print(-1,nmae, mae, rmse)
+   
+    error_table = []
     for i in range(B_loop):
         B = X + (Y - R*X)
         U, V, list_reconstruction_err_ = gnmf.gnmf(B,A, lambd,gnmf_components,max_iter=gnmf_itr)
         X = np.dot(U, V)
-        #nmae, mae, rmse = test(X,fold)
-        #print(i,nmae, mae, rmse)
-        #nmae_iter.append(nmae)
-        #mae_iter.append(mae)
-        #rmse_iter.append(rmse)
-    nmae, mae, rmse = test(X,fold)
-    return X,nmae, mae, rmse
+        if i%50==0:
+            nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
+            error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+            print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
+            
+    nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
+    error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+    print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
+    
+    return X,error_table
 
 def test(X,i):
     p = testbase + 'u' + str(i) +'.test'
-    error = 0
-    rm = 0
-    w = 0
+    error = 0.0
+    rm = 0.0
+    error_rint = 0.0
+    rm_rint = 0.0
+    w = 0.0
     with open(p) as f:
         for line in f:
             temp =  line.strip().split('\t')
@@ -137,12 +136,16 @@ def test(X,i):
             data = da[:3]
             predictedRating = X[data[0]-1][data[1]-1] 
             w = w+1
-            error += np.abs(np.rint(predictedRating) - data[2])
-            rm += (np.abs(predictedRating - data[2])) ** 2
-        nmae = error/(4*w)
+            error += np.abs(predictedRating - data[2])
+            error_rint += np.abs(np.rint(predictedRating) - data[2])
+            rm += (predictedRating - data[2]) ** 2
+            rm_rint += (np.rint(predictedRating - data[2])) ** 2
         mae = error/w
+        nmae = error/(4*w)
+        nmae_rint = error_rint/(4*w)
         rmse = (rm/w) ** 0.5
-    return nmae, mae, rmse
+        rmse_rint = (rm_rint/w) ** 0.5
+    return nmae, nmae_rint, mae, rmse, rmse_rint
 
 def main():
     global neighbours
@@ -150,13 +153,10 @@ def main():
     global gnmf_components
     global B_loop
     
-    #temps_nmae = []
-    #temps_mae = []
-    #temps_rmse = []
     error = []
     for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
-        for ng in [50, 100, 200, 250]:
-            for comp in [20,40,50,60,80]:
+        for ng in [50, 100, 200, 250,400]:
+            for comp in [20,40,50,60,80,100]:
                 for i in range(1,2):
                     
                     lambd = l
@@ -164,30 +164,13 @@ def main():
                     gnmf_components = comp
                     
                     dataPrep(i)
-                    X,nmae, mae, rmse = latentfactor(i)
-                    err = ["l: "+str(l)+" ng: "+str(ng)+" comp: "+str(comp) ,nmae, mae, rmse]
-                    print(err)
-                    error.append(err)
-                    #temps_nmae.append(nmae_iter)
-                    #temps_mae.append(mae_iter)
-                    #temps_rmse.append(rmse_iter)
-                    #print("error for--" , nmae_iter, mae_iter, rmse_iter , "for fold--" , i)
-                #print(temps_nmae, temps_mae, temps_rmse)
+                    X,error_table = latentfactor(i)
+                    error.append(error_table)
+                    error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))
-    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_100_for_item.xlsx')
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_item_100.xlsx')
     df_error.to_excel(writer,'Sheet1')
     writer.save()
-                #df_nmae = pd.DataFrame(np.array(temps_nmae))
-                #df_mae = pd.DataFrame(np.array(temps_mae))
-                #df_rmse = pd.DataFrame(np.array(temps_rmse))
-                #filename = 'gnmf_neigh_lambd_gcomp_giter'+str(neighbours)+'_'+str(lambd)+'_'+ \
-                #        str(gnmf_components)+'_'+ '_'+str(gnmf_itr)+'.xlsx'
-                #writer = pd.ExcelWriter(resultbase + filename)
-                #df_nmae.to_excel(writer,'NMAE')
-                #df_mae.to_excel(writer, 'MAE')
-                #df_rmse.to_excel(writer, 'RMSE')
-                
-                #writer.save()
 
 if __name__ == "__main__": main()
