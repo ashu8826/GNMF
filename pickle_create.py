@@ -2,23 +2,24 @@ import numpy as np
 import pickle
 
 data_root = "dataset"
-datasets = [("{}/ml-100K".format(data_root), "\t"),("{}/ml-1M".format(data_root), "::")]
+#datasets = [("{}/ml-100K".format(data_root), "\t"),("{}/ml-1M".format(data_root), "::")]
+datasets = [("{}/ml-10M".format(data_root), "\t")]
 folds = 5
 
 def getmatrix(data_file):
-	file_len, A = getlist(data_file)
-
-	num_users = max(A, key = lambda x: x[0])[0]
-	num_items = max(A, key = lambda x: x[1])[1]
-
-	M = np.empty((num_users, num_items))
-
-	M.fill(0)
-
-	for user, item, rating in A:
-		M[user-1][item-1] = rating
-
-	return num_users, num_items, M
+    file_len, A = getlist(data_file)
+    num_users = max(A, key = lambda x: x[0])[0]
+    num_items = max(A, key = lambda x: x[1])[1]
+    
+    M = np.zeros((int(num_users), int(num_items)))
+    
+    M.fill(0)
+    for user, item, rating in A:
+        user = int(user)
+        item = int(item)
+        M[user-1][item-1] = rating
+    
+    return int(num_users), int(num_items), M
 
 def getlist(data_file):
 	file = open(data_file, "r")
@@ -26,7 +27,7 @@ def getlist(data_file):
 	A = []
 
 	for line in file:
-		*data, _ = map(int, line.split('\t'))
+		*data, _ = map(float, line.split('\t'))
 
 		A.append(data)
 
@@ -74,7 +75,7 @@ for data_root, sep in datasets:
 	database = "DataPickle/"+data_root.split("-",1)[1]+"/";
 	for fold in range(folds):
 		
-		print("fold", fold, end = ": ")
+		print("fold", fold,": ")
 		
 		num_users, num_items, RM = getmatrix("{}/{}.base".format(data_root, "u"+str(fold + 1)))
 		

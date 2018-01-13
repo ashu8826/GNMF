@@ -114,12 +114,13 @@ def latentfactor(fold):
         if i%50==0:
             nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
             error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
-            print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
+            print(error_table)
+            #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
             
     nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
     error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
-    print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
-    
+    #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
+    print(error_table)
     return X,error_table
 
 def test(X,i):
@@ -165,7 +166,7 @@ def main():
                     
                     dataPrep(i)
                     X,error_table = latentfactor(i)
-                    error.append(error_table)
+                    error.extend(error_table)
                     error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))

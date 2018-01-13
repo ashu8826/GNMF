@@ -165,7 +165,7 @@ def main():
                     
                     dataPrep(i)
                     X,error_table = latentfactor(i)
-                    error.append(error_table)
+                    error.extend(error_table)
                     error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))
