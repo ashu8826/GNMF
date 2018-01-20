@@ -2,8 +2,8 @@ import numpy as np
 import pickle
 
 data_root = "dataset"
-#datasets = [("{}/ml-100K".format(data_root), "\t"),("{}/ml-1M".format(data_root), "::")]
-datasets = [("{}/ml-10M".format(data_root), "\t")]
+datasets = [("{}/ml-100K".format(data_root), "\t"),("{}/ml-1M".format(data_root), "::")]
+#datasets = [("{}/ml-10M".format(data_root), "\t")]
 folds = 5
 
 def getmatrix(data_file):
@@ -78,6 +78,9 @@ for data_root, sep in datasets:
 		print("fold", fold,": ")
 		
 		num_users, num_items, RM = getmatrix("{}/{}.base".format(data_root, "u"+str(fold + 1)))
+		
+		RM = np.transpose(RM)
+		num_users, num_items = num_items, num_users
 		
 		MU   = mean_users(RM, num_users)
 		
