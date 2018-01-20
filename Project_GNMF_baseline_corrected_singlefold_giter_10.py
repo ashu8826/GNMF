@@ -169,7 +169,7 @@ def main():
                     error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))
-    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_10.xlsx')
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_1M_10.xlsx')
     df_error.to_excel(writer,'Sheet1')
     writer.save()
 
