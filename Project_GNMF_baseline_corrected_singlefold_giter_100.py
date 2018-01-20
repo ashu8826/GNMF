@@ -2,19 +2,18 @@ import numpy as np
 import pickle
 import gnmf
 import pandas as pd
-
+'''
 testbase = "dataset/ml-100K/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 943
 nitem = 1682
 '''
-testbase = "ml-1M/"
+testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
-'''
 
 neighbours=200
 lambd = 2000
@@ -114,13 +113,13 @@ def latentfactor(fold):
         if i%50==0:
             nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
             error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+            #print(error_table)
             #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
             
     nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
     error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+    #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
     print(error_table)
-	#print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
-    
     return X,error_table
 
 def test(X,i):
@@ -155,9 +154,9 @@ def main():
     global B_loop
     
     error = []
-    for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
-        for ng in [50, 100, 200, 250]:
-            for comp in [20,40,50,60,80]:
+    for l in [0.1,0.5,1]:#[0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
+        for ng in [200,250,300]:#[50, 100, 200, 250]:
+            for comp in [20,30,40]:#[20,40,50,60,80]:
                 for i in range(1,2):
                     
                     lambd = l
@@ -170,7 +169,7 @@ def main():
                     error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))
-    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_100.xlsx')
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_1M_100.xlsx')
     df_error.to_excel(writer,'Sheet1')
     writer.save()
 

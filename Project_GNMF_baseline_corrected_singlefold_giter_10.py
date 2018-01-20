@@ -9,7 +9,7 @@ resultbase = "Results/100K/"
 nuser = 943
 nitem = 1682
 '''
-testbase = "ml-1M/"
+testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040

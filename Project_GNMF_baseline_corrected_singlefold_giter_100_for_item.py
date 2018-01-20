@@ -9,13 +9,12 @@ resultbase = "Results/100K/"
 nuser = 1682#943
 nitem = 943#1682
 '''
-testbase = "ml-1M/"
+testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
 '''
-
 neighbours=200
 lambd = 2000
 gnmf_components = 50
@@ -114,13 +113,13 @@ def latentfactor(fold):
         if i%50==0:
             nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
             error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+            #print(error_table)
             #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
             
     nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
     error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
+    #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
     print(error_table)
-	#print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
-    
     return X,error_table
 
 def test(X,i):
