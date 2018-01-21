@@ -88,7 +88,7 @@ for data_root, sep in datasets:
 
 		SIM  = sim_mat(RM, SD, num_users)
 
-		with open(database+str(fold+1)+"/usermat.pickle","wb") as f:
+		with open(database+str(fold+1)+"/itemmat.pickle","wb") as f:
 			pickle.dump(SIM,f)
-		with open(database+str(fold+1)+"/input.pickle","wb") as f:
-			pickle.dump(RM,f)
+#		with open(database+str(fold+1)+"/input.pickle","wb") as f:
+#			pickle.dump(RM,f)
