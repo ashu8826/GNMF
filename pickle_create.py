@@ -27,7 +27,7 @@ def getlist(data_file):
 	A = []
 
 	for line in file:
-		*data, _ = map(float, line.split('\t'))
+		*data, _ = map(int, line.split('\t'))
 
 		A.append(data)
 
