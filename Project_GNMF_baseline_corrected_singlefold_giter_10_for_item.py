@@ -2,19 +2,37 @@ import numpy as np
 import pickle
 import gnmf
 import pandas as pd
-
+'''
 testbase = "dataset/ml-100K/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 1682#943
 nitem = 943#1682
+Lamda = [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]
+Neighbour = [50, 100, 200, 250,400]
+Gnmf_Com = [20,40,50,60,80,100]
 '''
+
 testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
-nuser = 6040
-nitem = 3952
+nuser = 3952#6040
+nitem = 6040#3952
+Lamda = [0.1,0.5,1]
+Neighbour = [200,250,300,400]
+Gnmf_Com = [20,40,60]
+
 '''
+testbase = "dataset/ml-10M/"
+database = "DataPickle/10M/"
+resultbase = "Results/10M/"
+nuser = 65133#71567
+nitem = 71567#65133
+Lamda = [0.1,0.5,1]
+Neighbour = [200,250,300]
+Gnmf_Com = [20,30,40]
+'''
+foldno = 2
 neighbours=200
 lambd = 2000
 gnmf_components = 50
@@ -154,10 +172,10 @@ def main():
     global B_loop
     
     error = []
-    for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
-        for ng in [50, 100, 200, 250,400]:
-            for comp in [20,40,50,60,80,100]:
-                for i in range(1,2):
+    for l in Lamda:
+        for ng in Neighbour:
+            for comp in Gnmf_Com:
+                for i in range(1,foldno):
                     
                     lambd = l
                     neighbours = ng
@@ -169,7 +187,7 @@ def main():
                     error.append([" "," "," "," "," "," "," "," "])
                     
     df_error = pd.DataFrame(np.array(error))
-    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_item_10.xlsx')
+    writer = pd.ExcelWriter(resultbase+'gnmf_paramtertunning_item_1M_10.xlsx')
     df_error.to_excel(writer,'Sheet1')
     writer.save()
 
