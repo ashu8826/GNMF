@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import gnmf
 import pandas as pd
+
 '''
 testbase = "dataset/ml-100K/"
 database = "DataPickle/100K/"
@@ -13,7 +14,6 @@ Neighbour = [50, 100, 200, 250,400]
 Gnmf_Com = [20,40,50,60,80,100]
 number_of_ratings = 80000
 '''
-
 testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
@@ -39,7 +39,7 @@ neighbours=200
 lambd = 2000
 gnmf_components = 50
 B_loop = 500
-gnmf_itr = 10 #10 50 100 500
+gnmf_itr = 50 #10 50 100 500
 
 result = []
 iisim = []
@@ -80,7 +80,6 @@ def dataPrep(fold):
     R = np.array(R)
         
 def Initialise(Y):
-    
     MU = mean_users(Y.T, nuser)
     MI = mean_items(Y, nitem)
     baseline = np.zeros(shape = Y.shape)
@@ -123,7 +122,6 @@ def find_mu(num_of_ratings, Y):
 def latentfactor(fold):
     global R
     global X
-   
     error_table = []
     for i in range(B_loop):
         B = X + (Y - R*X)
@@ -132,12 +130,8 @@ def latentfactor(fold):
         if i%50==0:
             nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
             error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
-            #print(error_table)
-            #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
-            
     nmae, nmae_rint, mae, rmse, rmse_rint = test(X,fold)
     error_table.append([nmae, nmae_rint, mae, rmse, rmse_rint,lambd,neighbours,gnmf_components])
-    #print(i,nmae, nmae_rint, mae, rmse, rmse_rint)
     print(error_table)
     return X,error_table
 
@@ -171,12 +165,11 @@ def main():
     global lambd
     global gnmf_components
     global B_loop
-    
     error = []
-    for l in [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]:
-        for ng in [50, 100, 200, 250,400]:
-            for comp in [20,40,50,60,80,100]:
-                for i in range(1,2):
+    for l in Lamda:
+        for ng in Neighbour:
+            for comp in Gnmf_Com:
+                for i in range(1,foldno):
                     
                     lambd = l
                     neighbours = ng
