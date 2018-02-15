@@ -11,6 +11,7 @@ nitem = 943#1682
 Lamda = [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]
 Neighbour = [50, 100, 200, 250,400]
 Gnmf_Com = [20,40,50,60,80,100]
+number_of_ratings = 80000
 '''
 
 testbase = "dataset/ml-1M/"
@@ -19,9 +20,9 @@ resultbase = "Results/1M/"
 nuser = 3952#6040
 nitem = 6040#3952
 Lamda = [0.1,0.5,1]
-Neighbour = [200,250,300,400]
+Neighbour = [800,1000,1200]
 Gnmf_Com = [20,40,60]
-
+number_of_ratings = 800000
 '''
 testbase = "dataset/ml-10M/"
 database = "DataPickle/10M/"
@@ -31,6 +32,7 @@ nitem = 71567#65133
 Lamda = [0.1,0.5,1]
 Neighbour = [200,250,300]
 Gnmf_Com = [20,30,40]
+number_of_ratings = 8000000
 '''
 foldno = 2
 neighbours=200
@@ -46,7 +48,6 @@ R = [] # 0 1 matrix
 X = []  # filled data
 Y = [] #uimat 
 
-number_of_ratings = 80000
 K_baseline = 25
 mu = 0
 

@@ -2,19 +2,41 @@ import numpy as np
 import pickle
 import gnmf
 import pandas as pd
+
 '''
 testbase = "dataset/ml-100K/"
 database = "DataPickle/100K/"
 resultbase = "Results/100K/" 
 nuser = 943
 nitem = 1682
+Lamda = [0.0001,0.001,0.01,0.1,1,10,50,100,500,2000]
+Neighbour = [50, 100, 200, 250]
+Gnmf_Com = [20,40,50,60,80]
+number_of_ratings = 80000
 '''
+
 testbase = "dataset/ml-1M/"
 database = "DataPickle/1M/"
 resultbase = "Results/1M/"
 nuser = 6040
 nitem = 3952
+Lamda = [0.1,0.5,1]
+Neighbour = [1000,1500,2000]
+Gnmf_Com = [20,40,60]
+number_of_ratings = 800000
 
+'''
+testbase = "dataset/ml-10M/"
+database = "DataPickle/10M/"
+resultbase = "Results/10M/"
+nuser = 71567
+nitem = 65133
+Lamda = [0.1,0.5,1]
+Neighbour = [200,250,300]
+Gnmf_Com = [20,30,40]
+number_of_ratings = 8000000
+'''
+foldno = 2
 neighbours=200
 lambd = 2000
 gnmf_components = 50
@@ -28,9 +50,10 @@ R = [] # 0 1 matrix
 X = []  # filled data
 Y = [] #uimat 
 
-number_of_ratings = 80000
 K_baseline = 25
 mu = 0
+
+
 
 def dataPrep(fold):
     global Y
